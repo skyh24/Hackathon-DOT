@@ -35,7 +35,9 @@ pub use frame_support::{
 	},
 	StorageValue,
 };
+use frame_support::traits::AsEnsureOriginWithArg;
 pub use frame_system::Call as SystemCall;
+use frame_system::EnsureSigned;
 pub use pallet_balances::Call as BalancesCall;
 pub use pallet_timestamp::Call as TimestampCall;
 use pallet_transaction_payment::CurrencyAdapter;
@@ -48,6 +50,8 @@ pub use pallet_template;
 
 /// An index to a block.
 pub type BlockNumber = u32;
+
+pub type Moment = u64;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
 pub type Signature = MultiSignature;
@@ -93,8 +97,8 @@ pub mod opaque {
 //   https://docs.substrate.io/v3/runtime/upgrades#runtime-versioning
 #[sp_version::runtime_version]
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("node-template"),
-	impl_name: create_runtime_str!("node-template"),
+	spec_name: create_runtime_str!("node-melody"),
+	impl_name: create_runtime_str!("node-melody"),
 	authoring_version: 1,
 	// The version of the runtime specification. A full node will not attempt to use its native
 	//   runtime in substitute for the on-chain Wasm runtime unless all of `spec_name`,
@@ -124,6 +128,9 @@ pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
 pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
 pub const HOURS: BlockNumber = MINUTES * 60;
 pub const DAYS: BlockNumber = HOURS * 24;
+
+pub mod constants;
+use constants::currency::*;
 
 /// The version information used to identify this runtime when compiled natively.
 #[cfg(feature = "std")]
@@ -266,6 +273,76 @@ impl pallet_template::Config for Runtime {
 	type Event = Event;
 }
 
+parameter_types! {
+	pub const MaxRecursions: u32 = 10;
+	pub const ResourceSymbolLimit: u32 = 10;
+	pub const PartsLimit: u32 = 25;
+	pub const MaxPriorities: u32 = 25;
+	pub const CollectionSymbolLimit: u32 = 100;
+	pub const MaxResourcesOnMint: u32 = 100;
+}
+
+impl pallet_music::Config for Runtime {
+	type Event = Event;
+	type ProtocolOrigin = frame_system::EnsureRoot<AccountId>;
+	type MaxRecursions = MaxRecursions;
+	type ResourceSymbolLimit = ResourceSymbolLimit;
+	type PartsLimit = PartsLimit;
+	type MaxPriorities = MaxPriorities;
+	type CollectionSymbolLimit = CollectionSymbolLimit;
+	type MaxResourcesOnMint = MaxResourcesOnMint;
+}
+
+parameter_types! {
+	pub const MinimumOfferAmount: Balance = UNITS / 10_000;
+}
+
+impl pallet_melody::Config for Runtime {
+	type Event = Event;
+	type ProtocolOrigin = frame_system::EnsureRoot<AccountId>;
+	type Currency = Balances;
+	type MinimumOfferAmount = MinimumOfferAmount;
+}
+
+parameter_types! {
+	pub const CollectionDeposit: Balance = 10 * CENTS;
+	pub const ItemDeposit: Balance = DOLLARS;
+	pub const KeyLimit: u32 = 32;
+	pub const ValueLimit: u32 = 256;
+	pub const UniquesMetadataDepositBase: Balance = 10 * CENTS;
+	pub const AttributeDepositBase: Balance = 10 * CENTS;
+	pub const DepositPerByte: Balance = CENTS;
+	pub const UniquesStringLimit: u32 = 128;
+	pub const MaxPropertiesPerTheme: u32 = 100;
+	pub const MaxCollectionsEquippablePerPart: u32 = 100;
+}
+
+impl pallet_uniques::Config for Runtime {
+	type Event = Event;
+	type CollectionId = u32;
+	type ItemId = u32;
+	type Currency = Balances;
+	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
+	type CreateOrigin = AsEnsureOriginWithArg<EnsureSigned<AccountId>>;
+	type Locker = pallet_music::Pallet<Runtime>;
+	type CollectionDeposit = CollectionDeposit;
+	type ItemDeposit = ItemDeposit;
+	type MetadataDepositBase = UniquesMetadataDepositBase;
+	type AttributeDepositBase = AttributeDepositBase;
+	type DepositPerByte = DepositPerByte;
+	type StringLimit = UniquesStringLimit;
+	type KeyLimit = KeyLimit;
+	type ValueLimit = ValueLimit;
+	type WeightInfo = ();
+}
+
+impl pallet_utility::Config for Runtime {
+	type Event = Event;
+	type Call = Call;
+	type PalletsOrigin = OriginCaller;
+	type WeightInfo = ();
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub enum Runtime where
@@ -283,6 +360,10 @@ construct_runtime!(
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-template in the runtime.
 		TemplateModule: pallet_template,
+		Music: pallet_music::{Pallet, Call, Event<T>, Storage},
+		Melody: pallet_melody::{Pallet, Call, Storage, Event<T>},
+		Uniques: pallet_uniques::{Pallet, Call, Storage, Event<T>},
+		Utility: pallet_utility::{Pallet, Call, Storage, Event},
 	}
 );
 
