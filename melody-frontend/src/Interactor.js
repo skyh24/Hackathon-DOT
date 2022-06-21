@@ -16,7 +16,7 @@ function Main(props) {
   const [paramFields, setParamFields] = useState([])
 
   const initFormState = {
-    palletRpc: '',
+    palletRpc: 'music',
     callable: '',
     inputParams: [],
   }
@@ -45,6 +45,7 @@ function Main(props) {
       .sort()
       .filter(pr => Object.keys(apiType[pr]).length > 0)
       .map(pr => ({ key: pr, value: pr, text: pr }))
+      // console.log("updatePalletRPCs", api, interxType, palletRPCs)
     setPalletRPCs(palletRPCs)
   }
 
@@ -55,6 +56,7 @@ function Main(props) {
     const callables = Object.keys(getApiType(api, interxType)[palletRpc])
       .sort()
       .map(c => ({ key: c, value: c, text: c }))
+      // console.log("updateCallables", api, interxType, palletRPCs, callables)
     setCallables(callables)
   }
 
@@ -267,6 +269,7 @@ function InteractorSubmit(props) {
   if (interxType === 'QUERY') {
     return <TxButton label="Query" type="QUERY" color="blue" {...props} />
   } else if (interxType === 'EXTRINSIC') {
+    console.log(props);
     return <TxGroupButton {...props} />
   } else if (interxType === 'RPC' || interxType === 'CONSTANT') {
     return <TxButton label="Submit" type={interxType} color="blue" {...props} />

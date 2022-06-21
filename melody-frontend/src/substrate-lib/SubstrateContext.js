@@ -67,7 +67,6 @@ const connect = (state, dispatch) => {
   console.log(`Connected socket: ${socket}`)
   const provider = new WsProvider(socket)
   const _api = new ApiPromise({ provider, rpc: jsonrpc })
-
   // Set listeners for disconnection and reconnection event.
   _api.on('connected', () => {
     dispatch({ type: 'CONNECT', payload: _api })
