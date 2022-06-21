@@ -377,44 +377,6 @@ pub mod pallet {
 
 		#[pallet::weight(10_000 + T::DbWeight::get().reads_writes(1,1))]
 		#[transactional]
-		pub fn add_composable_resource(
-			origin: OriginFor<T>,
-			collection_id: CollectionId,
-			nft_id: NftId,
-			resource: ComposableResource<StringLimitOf<T>, BoundedVec<PartId, T::PartsLimit>>,
-		) -> DispatchResult {
-			let sender = ensure_signed(origin.clone())?;
-
-			let resource_id = Self::resource_add(
-				sender,
-				collection_id,
-				nft_id,
-				ResourceTypes::Composable(resource),
-			)?;
-
-			Self::deposit_event(Event::ResourceAdded { nft_id, resource_id });
-			Ok(())
-		}
-
-		#[pallet::weight(10_000 + T::DbWeight::get().reads_writes(1,1))]
-		#[transactional]
-		pub fn add_slot_resource(
-			origin: OriginFor<T>,
-			collection_id: CollectionId,
-			nft_id: NftId,
-			resource: SlotResource<StringLimitOf<T>>,
-		) -> DispatchResult {
-			let sender = ensure_signed(origin.clone())?;
-
-			let resource_id =
-				Self::resource_add(sender, collection_id, nft_id, ResourceTypes::Slot(resource))?;
-
-			Self::deposit_event(Event::ResourceAdded { nft_id, resource_id });
-			Ok(())
-		}
-
-		#[pallet::weight(10_000 + T::DbWeight::get().reads_writes(1,1))]
-		#[transactional]
 		pub fn accept_resource(
 			origin: OriginFor<T>,
 			collection_id: CollectionId,

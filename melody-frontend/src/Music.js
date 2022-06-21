@@ -107,7 +107,7 @@ function Main(props) {
               palletRpc: musicModule,
               callable: createCollection,
               inputParams: inputParams,
-              paramFields: [true],
+              paramFields: getParamFields(EXTRINSIC, musicModule, createCollection),
             }}
           />
         </Form.Field>
