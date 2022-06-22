@@ -43,21 +43,24 @@ async function main () {
 //   const recipient = keyring.addFromSeed(randomAsU8a(32)).address;
 
 const resource0 = api.createType("BasicResource", {
-  src:  "https://d2i9ybouka0ieh.cloudfront.net/audio-transcoded/5fcda0ac-6570-42cb-860a-8a30070fc792/AUDIO_TRANSCODED/718258-8824763-_Mine__for_Sound.m4a",
+  src: "http://res.cloudinary.com/alick/video/upload/v1502375674/Bedtime_Stories.mp3",
+//   src:  "https://d2i9ybouka0ieh.cloudfront.net/audio-transcoded/5fcda0ac-6570-42cb-860a-8a30070fc792/AUDIO_TRANSCODED/718258-8824763-_Mine__for_Sound.m4a",
   metadata: null, 
   license: "Melody",
   thumb: "https://www.sound.xyz/_next/image?url=https%3A%2F%2Fd2i9ybouka0ieh.cloudfront.net%2Fartist-uploads%2F5a31ceab-599c-4262-b67e-49c3ecddf322%2FRELEASE_COVER_IMAGE%2F1320272-default&w=3840&q=75"
 })
 
 const resource1 = api.createType("BasicResource", {
-  src:  "https://d2i9ybouka0ieh.cloudfront.net/audio-transcoded/df058afe-27dd-4f76-8ff7-49d6238fd247/AUDIO_TRANSCODED/15026-3521472-ILOVEDUILOVEDUILOVEDU_-_FINAL.m4a",
+  src: "http://res.cloudinary.com/alick/video/upload/v1502689683/Luis_Fonsi_-_Despacito_ft._Daddy_Yankee_uyvqw9.mp3",
+//   src:  "https://d2i9ybouka0ieh.cloudfront.net/audio-transcoded/df058afe-27dd-4f76-8ff7-49d6238fd247/AUDIO_TRANSCODED/15026-3521472-ILOVEDUILOVEDUILOVEDU_-_FINAL.m4a",
   metadata: null, 
   license: "Melody",
   thumb: "https://www.sound.xyz/_next/image?url=https%3A%2F%2Fd2i9ybouka0ieh.cloudfront.net%2Fartist-uploads%2Fea244c7a-1aa3-42bd-8462-da7dc2b180d8%2FRELEASE_COVER_IMAGE%2F1433068-default&w=3840&q=75"
 })
 
 const resource2 = api.createType("BasicResource", {
-  src:  "https://d2i9ybouka0ieh.cloudfront.net/audio-transcoded/51cb01b2-d47f-4888-a546-c7675783fa8b/AUDIO_TRANSCODED/8449608-8354422-SLOE_JACK_-_Renegade__LabozV5.1_.m4a",
+  src: "https://res.cloudinary.com/ehsanahmadi/video/upload/v1573550770/Sirvan-Khosravi-Dorost-Nemisham-128_kb8urq.mp3",
+//   src:  "https://d2i9ybouka0ieh.cloudfront.net/audio-transcoded/51cb01b2-d47f-4888-a546-c7675783fa8b/AUDIO_TRANSCODED/8449608-8354422-SLOE_JACK_-_Renegade__LabozV5.1_.m4a",
   metadata: null, 
   license: "Melody",
   thumb: "https://www.sound.xyz/_next/image?url=https%3A%2F%2Fd2i9ybouka0ieh.cloudfront.net%2Fartist-uploads%2Fca001c82-e4c1-4e80-95cb-cb4af293c079%2FRELEASE_COVER_IMAGE%2F7253614-default&w=3840&q=75"
