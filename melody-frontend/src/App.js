@@ -13,13 +13,14 @@ import { SubstrateContextProvider, useSubstrateState } from './substrate-lib'
 import { DeveloperConsole } from './substrate-lib/components'
 
 import AccountSelector from './AccountSelector'
-import BlockNumber from './BlockNumber'
-import Events from './Events'
-import Interactor from './Interactor'
-import Metadata from './Metadata'
-import NodeInfo from './NodeInfo'
-import TemplateModule from './TemplateModule'
-import Music from './Music'
+import Example from './Example'
+// import BlockNumber from './BlockNumber'
+// import Events from './Events'
+// import Interactor from './Interactor'
+// import Metadata from './Metadata'
+// import NodeInfo from './NodeInfo'
+// import TemplateModule from './TemplateModule'
+// import Music from './Music'
 
 function Main() {
   const { apiState, apiError, keyringState } = useSubstrateState()
@@ -61,7 +62,8 @@ function Main() {
         <AccountSelector />
       </Sticky>
       <Container>
-        <Grid stackable columns="equal">
+        <Example />
+        {/* <Grid stackable columns="equal">
           <Grid.Row stretched>
             <NodeInfo />
             <Metadata />
@@ -81,7 +83,7 @@ function Main() {
 
           
           
-        </Grid>
+        </Grid> */}
       </Container>
       <DeveloperConsole />
     </div>
