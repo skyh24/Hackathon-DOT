@@ -62,7 +62,7 @@ function Main(props) {
 
     const handleBuy = (NFTID, amount) => {
         async function buyNFT() {
-            console.log("buy 0 ", NFTID)
+            console.log("buy 0 ", NFTID, amount)
             const fromAcct = await getFromAcct()
             await api.tx.melody.buy(0, NFTID, amount)
             .signAndSend(...fromAcct, ({ events = [], status }) => {
@@ -144,7 +144,7 @@ function Main(props) {
                     <a><Icon name='bolt' />{parseFloat(nft.list.amount.replace(/,/g, ''))/10000000000000000} DOT</a>
                 </Grid.Column>
                 <Grid.Column>                           
-                    <Button basic color='red' onClick={() => handleBuy(id)}>Buy</Button>
+                    <Button basic color='red' onClick={() => handleBuy(id, parseInt(nft.list.amount.replace(/,/g, '')))}>Buy</Button>
                 </Grid.Column>
                 </Grid.Row>
             </Grid>
