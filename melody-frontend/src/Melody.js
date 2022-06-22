@@ -53,7 +53,7 @@ function Main(props) {
             <Card.Header>{collection.symbol}</Card.Header>
             <Card.Meta>{nft.metadata}</Card.Meta>
             <Card.Description>
-                {nft.owner.AccountId.substr(0, 8)}
+                owner: {nft.owner.AccountId.substr(0, 8)}
             </Card.Description>
         </Card.Content>
         {nft.list ? (<Card.Content extra>

@@ -4,7 +4,6 @@ members = [
     "pallets/template",
     "pallets/melody",
     "pallets/music",
-    "pallets/nftbase",
     "primitives",
     "runtime",
 ]

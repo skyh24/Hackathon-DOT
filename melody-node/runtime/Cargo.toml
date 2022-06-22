@@ -57,7 +57,6 @@ pallet-utility = { version = "4.0.0-dev", default-features = false, git = "https
 pallet-template = { version = "4.0.0-dev", default-features = false, path = "../pallets/template" }
 pallet-melody = { version = "4.0.0-dev", default-features = false, path = "../pallets/melody" }
 pallet-music = { version = "4.0.0-dev", default-features = false, path = "../pallets/music" }
-pallet-nftbase = { version = "4.0.0-dev", default-features = false, path = "../pallets/nftbase" }
 
 [build-dependencies]
 substrate-wasm-builder = { version = "5.0.0-dev", git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v0.9.23" }
@@ -81,7 +80,6 @@ std = [
 	"pallet-template/std",
 	"pallet-melody/std",
 	"pallet-music/std",
-	"pallet-nftbase/std",
 	"pallet-timestamp/std",
 	"pallet-transaction-payment-rpc-runtime-api/std",
 	"pallet-transaction-payment/std",
