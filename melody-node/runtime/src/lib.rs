@@ -312,7 +312,7 @@ parameter_types! {
 	pub const UniquesMetadataDepositBase: Balance = 10 * CENTS;
 	pub const AttributeDepositBase: Balance = 10 * CENTS;
 	pub const DepositPerByte: Balance = CENTS;
-	pub const UniquesStringLimit: u32 = 128;
+	pub const UniquesStringLimit: u32 = 512;
 	pub const MaxPropertiesPerTheme: u32 = 100;
 	pub const MaxCollectionsEquippablePerPart: u32 = 100;
 }

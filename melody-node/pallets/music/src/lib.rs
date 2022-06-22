@@ -138,32 +138,6 @@ pub mod pallet {
 	>;
 
 	#[pallet::storage]
-	#[pallet::getter(fn composable_resources)]
-	pub type ComposableResources<T: Config> = StorageNMap<
-		_,
-		(
-			NMapKey<Blake2_128Concat, CollectionId>,
-			NMapKey<Blake2_128Concat, NftId>,
-			NMapKey<Blake2_128Concat, BaseId>,
-		),
-		(),
-	>;
-
-	#[pallet::storage]
-	#[pallet::getter(fn slot_resources)]
-	pub type SlotResources<T: Config> = StorageNMap<
-		_,
-		(
-			NMapKey<Blake2_128Concat, CollectionId>,
-			NMapKey<Blake2_128Concat, NftId>,
-			NMapKey<Blake2_128Concat, ResourceId>,
-			NMapKey<Blake2_128Concat, BaseId>,
-			NMapKey<Blake2_128Concat, SlotId>,
-		),
-		(),
-	>;
-
-	#[pallet::storage]
 	#[pallet::getter(fn properties)]
 	pub(super) type Properties<T: Config> = StorageNMap<
 		_,
@@ -528,11 +502,9 @@ pub mod pallet {
 			origin: OriginFor<T>,
 			owner: Option<T::AccountId>,
 			collection_id: CollectionId,
-			royalty_recipient: Option<T::AccountId>,
-			royalty: Option<Permill>,
 			metadata: BoundedVec<u8, T::StringLimit>,
-			transferable: bool,
-			resources: Option<BoundedResourceTypeOf<T>>,
+			// transferable: bool,
+			// resources: Option<BoundedResourceTypeOf<T>>,
 		) -> DispatchResult {
 			let sender = ensure_signed(origin.clone())?;
 			if let Some(collection_issuer) =
@@ -552,10 +524,8 @@ pub mod pallet {
 				sender,
 				nft_owner.clone(),
 				collection_id,
-				royalty_recipient,
-				royalty,
 				metadata,
-				transferable,
+				true,
 			)?;
 
 			pallet_uniques::Pallet::<T>::do_mint(
@@ -565,11 +535,11 @@ pub mod pallet {
 				|_details| Ok(()),
 			)?;
 
-			if let Some(resources) = resources {
-				for res in resources {
-					Self::resource_add(nft_owner.clone(), collection_id, nft_id, res)?;
-				}
-			}
+			// if let Some(resources) = resources {
+			// 	for res in resources {
+			// 		Self::resource_add(nft_owner.clone(), collection_id, nft_id, res)?;
+			// 	}
+			// }
 
 			Self::deposit_event(Event::NftMinted { owner: nft_owner, collection_id, nft_id });
 

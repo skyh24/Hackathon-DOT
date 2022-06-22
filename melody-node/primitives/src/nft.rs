@@ -41,11 +41,11 @@ pub struct NftInfo<AccountId, BoundedString> {
 	/// The owner of the NFT, can be either an Account or a tuple (CollectionId, NftId)
 	pub owner: AccountIdOrCollectionNftTuple<AccountId>,
 	/// Royalty (optional)
-	pub royalty: Option<RoyaltyInfo<AccountId>>,
+	// pub royalty: Option<RoyaltyInfo<AccountId>>,
 	/// Arbitrary data about an instance, e.g. IPFS hash
 	pub metadata: BoundedString,
 	/// Equipped state
-	pub equipped: bool,
+	// pub equipped: bool,
 	/// Pending state (if sent to NFT)
 	pub pending: bool,
 	/// transferability ( non-transferable is "souldbound" )
@@ -60,8 +60,6 @@ pub trait Nft<AccountId, BoundedString> {
 		sender: AccountId,
 		owner: AccountId,
 		collection_id: CollectionId,
-		royalty_recipient: Option<AccountId>,
-		royalty_amount: Option<Permill>,
 		metadata: BoundedString,
 		transferable: bool,
 	) -> Result<(CollectionId, NftId), DispatchError>;

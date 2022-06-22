@@ -194,19 +194,6 @@ for Pallet<T>
         let (root_owner, _) = Pallet::<T>::lookup_root_owner(collection_id, nft_id)?;
         ensure!(!Pallet::<T>::is_locked(collection_id, nft_id), pallet_uniques::Error::<T>::Locked);
 
-        match resource.clone() {
-            ResourceTypes::Basic(_r) => (),
-            ResourceTypes::Composable(r) => {
-                ComposableResources::<T>::insert((collection_id, nft_id, r.base), ());
-            },
-            ResourceTypes::Slot(r) => {
-                SlotResources::<T>::insert(
-                    (collection_id, nft_id, resource_id, r.base, r.slot),
-                    (),
-                );
-            },
-        }
-
         let res: ResourceInfo<BoundedVec<u8, T::StringLimit>, BoundedVec<PartId, T::PartsLimit>> =
             ResourceInfo::<BoundedVec<u8, T::StringLimit>, BoundedVec<PartId, T::PartsLimit>> {
                 id: resource_id,
@@ -373,8 +360,6 @@ impl<T: Config> Nft<T::AccountId, StringLimitOf<T>> for Pallet<T>
         _sender: T::AccountId,
         owner: T::AccountId,
         collection_id: CollectionId,
-        royalty_recipient: Option<T::AccountId>,
-        royalty_amount: Option<Permill>,
         metadata: StringLimitOf<T>,
         transferable: bool,
     ) -> sp_std::result::Result<(CollectionId, NftId), DispatchError> {
@@ -385,26 +370,11 @@ impl<T: Config> Nft<T::AccountId, StringLimitOf<T>> for Pallet<T>
             ensure!(nft_id < max, Error::<T>::CollectionFullOrLocked);
         }
 
-        let mut royalty: Option<RoyaltyInfo<T::AccountId>> = None;
-
-        if let Some(amount) = royalty_amount {
-            match royalty_recipient {
-                Some(recipient) => {
-                    royalty = Some(RoyaltyInfo::<T::AccountId> { recipient, amount });
-                },
-                None => {
-                    royalty = Some(RoyaltyInfo::<T::AccountId> { recipient: owner.clone(), amount });
-                },
-            }
-        };
-
         let owner_as_maybe_account = AccountIdOrCollectionNftTuple::AccountId(owner.clone());
 
         let nft = NftInfo {
             owner: owner_as_maybe_account,
-            royalty,
             metadata,
-            equipped: false,
             pending: false,
             transferable,
         };
