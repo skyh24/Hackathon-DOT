@@ -15,10 +15,7 @@ const CardExampleColored = () => (
             </Card.Description>
         </Card.Content>
         <Card.Content extra>
-            <a>
-                <Icon name='bolt' />
-                10 ETH
-            </a>
+            <a><Icon name='bolt' />10 ETH</a>
         </Card.Content>
     </Card>
     <Card color='orange' image='https://source.unsplash.com/random/266x200?melody' />

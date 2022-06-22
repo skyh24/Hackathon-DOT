@@ -1,79 +1,75 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Input, Grid, Card, Statistic } from 'semantic-ui-react'
+import { Grid, Card, Image, Icon } from 'semantic-ui-react'
 
 import { useSubstrateState } from './substrate-lib'
-import { TxButton } from './substrate-lib/components'
 
 function Main(props) {
   const { api } = useSubstrateState()
 
   // The transaction submission status
-  const [status, setStatus] = useState('')
+  // const [status, setStatus] = useState('')
 
   // The currently stored value
-  const [currentValue, setCurrentValue] = useState(0)
-  const [formValue, setFormValue] = useState(0)
+  const [collection, setCollection] = useState({})
+  const [nfts, setNfts] = useState([])
 
-  useEffect(() => {
-    let unsubscribe
-    api.query.templateModule
-      .something(newValue => {
-        // The storage value is an Option<u32>
-        // So we have to check whether it is None first
-        // There is also unwrapOr
-        if (newValue.isNone) {
-          setCurrentValue('<None>')
-        } else {
-          setCurrentValue(newValue.unwrap().toNumber())
-        }
-      })
-      .then(unsub => {
-        unsubscribe = unsub
-      })
-      .catch(console.error)
+  const getCollection = () => {
+    async function fetchData() {
+      const col = await api.query.music.collections(0)
+      const collection = col.toHuman()
+      setCollection(collection)
+      console.log(collection)
 
-    return () => unsubscribe && unsubscribe()
-  }, [api.query.templateModule])
+      let nfts = []
+      for (let i=0; i<collection.nftsCount; i++) {
+        const rs = await api.query.music.nfts(0, i)
+        const rsc = await api.query.music.resources(0, i, 0)
+        const li = await api.query.melody.listedNfts(0, i)
+        const nft = rs.toHuman()
+        // console.log(nft.owner.AccountId)
+        nft.resource = rsc.toHuman().resource.Basic
+        nft.list = li.toHuman()
+        nfts.push(nft)
+        if (nft.list)  
+          console.log(parseFloat(nft.list.amount.replace(/,/g, '')))
+      }
+      setNfts(nfts)
+      console.log(nfts);
+    }
+    fetchData()
+  }
+
+  useEffect(getCollection, [api.query.music, api.query.melody])
 
   return (
     <Grid.Column width={8}>
-      <h1>Template Module</h1>
-      <Card centered>
-        <Card.Content textAlign="center">
-          <Statistic label="Current Value" value={currentValue} />
+      <h1>Melody Marketplace</h1>
+      <h2>{collection.symbol}: {collection.nftsCount} </h2>
+      <Card.Group itemsPerRow={4}>
+      {nfts.map((nft, id) => (
+        <Card color='red' key={id}>
+        <Image src={nft.resource.thumb} wrapped ui={false} />
+        <Card.Content>
+            <Card.Header>{collection.symbol}</Card.Header>
+            <Card.Meta>{nft.metadata}</Card.Meta>
+            <Card.Description>
+                {nft.owner.AccountId.substr(0, 8)}
+            </Card.Description>
         </Card.Content>
-      </Card>
-      <Form>
-        <Form.Field>
-          <Input
-            label="New Value"
-            state="newValue"
-            type="number"
-            onChange={(_, { value }) => setFormValue(value)}
-          />
-        </Form.Field>
-        <Form.Field style={{ textAlign: 'center' }}>
-          <TxButton
-            label="Store Something"
-            type="SIGNED-TX"
-            setStatus={setStatus}
-            attrs={{
-              palletRpc: 'templateModule',
-              callable: 'doSomething',
-              inputParams: [formValue],
-              paramFields: [true],
-            }}
-          />
-        </Form.Field>
-        <div style={{ overflowWrap: 'break-word' }}>{status}</div>
-      </Form>
+        {nft.list ? (<Card.Content extra>
+            <a><Icon name='bolt' />{parseFloat(nft.list.amount.replace(/,/g, ''))/10000000000000000} DOT</a>
+        </Card.Content>) : null}
+        
+        </Card>
+      ))} 
+      </Card.Group>
     </Grid.Column>
   )
 }
 
-export default function TemplateModule(props) {
+export default function Melody(props) {
   const { api } = useSubstrateState()
-  return api.query.templateModule && api.query.templateModule.something ? (
+  return api.query.music && api.query.music ? (
     <Main {...props} />
   ) : null
 }

@@ -13,13 +13,13 @@ import { SubstrateContextProvider, useSubstrateState } from './substrate-lib'
 import { DeveloperConsole } from './substrate-lib/components'
 
 import AccountSelector from './AccountSelector'
-import Example from './Example'
+import Melody from './Melody'
 // import BlockNumber from './BlockNumber'
 // import Events from './Events'
 // import Interactor from './Interactor'
 // import Metadata from './Metadata'
 // import NodeInfo from './NodeInfo'
-// import TemplateModule from './TemplateModule'
+import TemplateModule from './TemplateModule'
 // import Music from './Music'
 
 function Main() {
@@ -62,7 +62,7 @@ function Main() {
         <AccountSelector />
       </Sticky>
       <Container>
-        <Example />
+        <Melody />
         {/* <Grid stackable columns="equal">
           <Grid.Row stretched>
             <NodeInfo />
